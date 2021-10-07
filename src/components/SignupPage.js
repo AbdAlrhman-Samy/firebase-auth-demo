@@ -5,14 +5,11 @@ import Alert from 'react-bootstrap/Alert'
 
 import {Link, useHistory} from "react-router-dom"
 
-import { useContext, useState } from "react"
-import { AuthContext } from "../AuthContext"
+import { useState } from "react"
 
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 function SignupPage() {
-
-    const user = useContext(AuthContext)
 
     const auth = getAuth();
 
