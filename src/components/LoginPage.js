@@ -31,7 +31,7 @@ function LoginPage() {
             setError(err)
         })
 
-        return login
+        return ()=>login
     }
 
     return (

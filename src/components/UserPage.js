@@ -1,19 +1,23 @@
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import { AuthContext } from "../AuthContext"
 
 import {useHistory} from "react-router-dom"
 
+import Container from "react-bootstrap/Container"
 import Button from "react-bootstrap/Button"
 
-import { getAuth, signOut, deleteUser } from "firebase/auth";
+import { getAuth, signOut } from "firebase/auth";
 
+import Profile from "./user components/Profile"
+import EditProfile from "./user components/EditProfile"
 
 function UserPage() {
+
+    const [profile, setProfile] = useState(true)
 
     const user = useContext(AuthContext)
     let history = useHistory();
 
-    const loggedinUser = getAuth().currentUser;
 
     function signoutUser() {
         signOut(getAuth()).then(() => {
@@ -22,20 +26,28 @@ function UserPage() {
 
     }
 
-    function deletAccount() {
-        deleteUser(loggedinUser)
-        .then(() => {
-            history.push("/")
-        })
-
-    }
-
     return (
-        <div className="text-center m-5">
-            <Button variant="outline-danger" onClick={signoutUser}>Sign out</Button>
-            <h1>{user.email}</h1>
-            <Button variant="danger" onClick={deletAccount}>Delete Account</Button>
-        </div>
+        <Container className="px-2">
+
+            <Container className="bg-dark text-white my-3 p-3 d-flex flex-row rounded justify-content-between align-items-center">
+
+                <Button onClick={()=>setProfile(!profile)}>
+                    {profile? "Edit Profile" : "Show Profile"}
+                </Button>
+
+                <Button variant="outline-danger" onClick={signoutUser}><i className="bi bi-box-arrow-in-left"></i> Sign out</Button>
+
+                
+            </Container>
+
+            {
+                profile?
+                <Profile user={user}/>
+                :
+                <EditProfile user={user}/>
+            }
+
+        </Container>
     )
 }
 

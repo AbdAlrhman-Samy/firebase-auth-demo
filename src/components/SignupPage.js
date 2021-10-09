@@ -29,20 +29,19 @@ function SignupPage() {
         } else {
             const newAcc = createUserWithEmailAndPassword(auth, email, pswrd)
             .then(user=>{
-                
                 setError(null)
                 history.push("/user")
             })
             .catch(err=>{
                 setError(err.message)
             })
-            return newAcc
+            
+            return ()=>newAcc
         }
-
     }
 
     return (
-        <Container fluid className="bg-info text-light vh-100 py-5">
+        <Container fluid className="bg-info text-light vh-100">
             <Container className="bg-light text-dark px-1 py-3 rounded-2 shadow-lg h-100 my-auto d-flex flex-column justify-content-between position-relative">
                 
                 <Link to="/" className="position-absolute top-0 end-0 m-2">
