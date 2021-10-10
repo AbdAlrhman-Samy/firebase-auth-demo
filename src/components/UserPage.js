@@ -1,4 +1,4 @@
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { AuthContext } from "../AuthContext"
 
 import {useHistory} from "react-router-dom"
@@ -7,6 +7,8 @@ import Container from "react-bootstrap/Container"
 import Button from "react-bootstrap/Button"
 
 import { getAuth, signOut } from "firebase/auth";
+import { getDatabase, ref, onValue } from "firebase/database";
+
 
 import Profile from "./user components/Profile"
 import EditProfile from "./user components/EditProfile"
@@ -14,10 +16,24 @@ import EditProfile from "./user components/EditProfile"
 function UserPage() {
 
     const [profile, setProfile] = useState(true)
+    const [userData, setUserData] = useState([])
 
     const user = useContext(AuthContext)
+
     let history = useHistory();
 
+    const db = getDatabase();
+    const userRef = ref(db, `users/${user.uid}/items`);  
+
+    useEffect(() => {
+            onValue(userRef, (snapshot) => {
+                const all = []
+                snapshot.forEach(item=>{
+                    all.push(item.val())
+                })
+                setUserData(all)
+              })
+    }, [])
 
     function signoutUser() {
         signOut(getAuth()).then(() => {
@@ -42,7 +58,7 @@ function UserPage() {
 
             {
                 profile?
-                <Profile user={user}/>
+                <Profile user={user} data={userData}/>
                 :
                 <EditProfile user={user}/>
             }
